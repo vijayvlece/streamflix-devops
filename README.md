@@ -36,3 +36,4 @@ Health check: `http://localhost:5000/health`.
 
 ## Important
 This demo does not stream licensed video. Before public production use, configure a strong `SECRET_KEY`, HTTPS, secure cookies, a production database, backups, and secrets management. Never commit passwords, cloud keys, or `.env` files.
+Testing automatic GitHub webhook to Jenkins CI/CD integration.
