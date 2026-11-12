@@ -47,6 +47,25 @@ pipeline {
             }
         }
 
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_TOKEN'
+                )]) {
+                    sh '''
+                        echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin
+                        docker tag $IMAGE_NAME:$BUILD_NUMBER $DOCKERHUB_USER/streamflix:$BUILD_NUMBER
+                        docker tag $IMAGE_NAME:$BUILD_NUMBER $DOCKERHUB_USER/streamflix:latest
+                        docker push $DOCKERHUB_USER/streamflix:$BUILD_NUMBER
+                        docker push $DOCKERHUB_USER/streamflix:latest
+                        docker logout
+                    '''
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 sh '''
